@@ -1,0 +1,27 @@
+# 服务使用http监听端口
+port: 80
+# 密钥设置,用于加密jwt-token
+secret: "123456"
+# token失效时间,单位:小时
+expire: 24
+# sqlite数据库配置
+database:
+  # 文件名
+  dbname: server
+# 初始密码
+initpasswd: '123456'
+# 忽略jwt认证的请求路径
+ignore:
+  - "/login"
+  - "/register"
+# 是否启用https,如果启用，需要设置证书路径
+https:
+  enable: false  # false--不启用,true--启用
+  port: 443  # https端口
+  key: "/xx/"  # key文件路径
+  pem: ""  # pem文件路径
+# 日志设置
+logger:
+  level: "info"  # 日志级别
+# 文件保存路径
+savepath: "/x/xx"
