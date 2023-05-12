@@ -28,6 +28,10 @@ func InitRouter() *gin.Engine {
 			r_role.POST("/add", AddRole)
 			r_role.POST("/bind", BindRole)
 		}
+		r_department := v1.Group("/department")
+		{
+			r_department.GET("/user", GetAllUserFromDepartment)
+		}
 	}
 
 	return r

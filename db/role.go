@@ -7,20 +7,20 @@ import (
 )
 
 type Role struct {
-	Uuid       string `gorm:"varchar(32);index:'role_index';primary_key"` // uuid,角色的唯一标识
-	RoleID     string `gorm:"varchar(20);column:role_id;unique"`          // 角色id
-	RoleName   string `gorm:"varchar(20)"`                                // 角色名称
-	Createor   string `gorm:"varchar(32)"`                                // 创建人,用户的uuid
-	CreateTime string `gorm:"varchar(20)"`                                // 创建时间
-	Updateor   string `gorm:"varchar(32)"`                                // 更新人,用户的Uuid
-	UpdateTime string `gorm:"varchar(20)"`                                // 更新时间
+	Uuid       string `gorm:"type:varchar(32);index:'role_index';primary_key"` // uuid,角色的唯一标识
+	RoleID     string `gorm:"type:varchar(20);column:role_id;unique"`          // 角色id
+	RoleName   string `gorm:"type:varchar(20)"`                                // 角色名称
+	Createor   string `gorm:"type:varchar(32)"`                                // 创建人,用户的uuid
+	CreateTime string `gorm:"type:varchar(20)"`                                // 创建时间
+	Updateor   string `gorm:"type:varchar(32)"`                                // 更新人,用户的Uuid
+	UpdateTime string `gorm:"type:varchar(20)"`                                // 更新时间
 }
 
 type RoleWithUser struct {
-	RoleID     string `gorm:"varchar(32);column:role_id"` // 角色的uuid
-	UserID     string `gorm:"varchar(32);column:user_id"` // 用户的uuid
-	Updateor   string `gorm:"varchar(32)"`                // 更新人,用户的uuid
-	UpdateTime string `gorm:"varchar(20)"`                // 更新时间
+	RoleID     string `gorm:"type:varchar(32);column:role_id"` // 角色的uuid
+	UserID     string `gorm:"type:varchar(32);column:user_id"` // 用户的uuid
+	Updateor   string `gorm:"type:varchar(32)"`                // 更新人,用户的uuid
+	UpdateTime string `gorm:"type:varchar(20)"`                // 更新时间
 }
 
 // 根据关键字查询角色数据

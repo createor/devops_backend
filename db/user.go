@@ -15,11 +15,22 @@ type User struct {
 	Password     string `gorm:"type:varchar(32)"`                                // 密码,MD5加密后
 	Sex          string `gorm:"type:varchar(2);default:'1'"`                     // 性别,1-男,2-女
 	Status       string `gorm:"type:varchar(2);default:'0'"`                     // 状态,1-启用，0-禁用
-	AreaProvince string `gorm:"varchar(10)"`                                     // 地区省份
-	AreaCity     string `gorm:"varchar(10)"`                                     // 地区城市
-	CreateTime   string `gorm:"varchar(20)"`                                     // 创建时间
-	UpdateTime   string `gorm:"varchar(20)"`                                     // 更新时间
+	AreaProvince string `gorm:"type:varchar(10)"`                                // 地区省份
+	AreaCity     string `gorm:"type:varchar(10)"`                                // 地区城市
+	CreateTime   string `gorm:"type:varchar(20)"`                                // 创建时间
+	UpdateTime   string `gorm:"type:varchar(20)"`                                // 更新时间
 	AvatarImg    string // 用户头像地址
+}
+
+// 用户权限
+type UserPermission struct {
+	UserID           string `gorm:"type:varchar(32);unique"`
+	CreateUser       string `gorm:"type:varchar(2);default:'0'"` // 创建用户权限
+	CreateRole       string `gorm:"type:varchar(2);default:'0'"` // 创建角色的权限
+	CreateMenu       string `gorm:"type:varchar(2);default:'0'"` // 创建菜单的权限
+	CreateDepartment string `gorm:"type:varchar(2);default:'0'"` // 创建部门权限
+	CreateTask       string `gorm:"type:varchar(2);default:'1'"` // 创建任务的权限
+	CreateArticle    string `gorm:"type:varchar(2);default:'1'"` // 创建文章的权限
 }
 
 func InitUser(newUser any) {

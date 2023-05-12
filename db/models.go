@@ -19,9 +19,15 @@ func init() {
 	}
 	DB.LogMode(true)
 	DB.SingularTable(true)
-	DB.Table("user").CreateTable(&User{})       // 创建用户表
+	DB.Table("user").CreateTable(&User{}) // 创建用户表
+	DB.Table("user_permission").CreateTable(&UserPermission{})
 	DB.Table("article").CreateTable(&Article{}) // 创建文章表
 	DB.Table("role").CreateTable(&Role{})
 	DB.Table("role_with_user").CreateTable(&RoleWithUser{})
 	DB.Table("article_permission").CreateTable(&ArticlePermission{})
+	DB.Table("department").CreateTable(&Department{})
+	DB.Table("department_with_user").CreateTable(&DepartmentWithUser{})
+	DB.Table("department_manage").CreateTable(&DepartmentManage{})
+	DB.Table("menu").CreateTable(&Menu{})
+	DB.Table("menu_with_role").CreateTable(&MenuWithRole{})
 }
