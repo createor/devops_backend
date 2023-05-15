@@ -1,11 +1,11 @@
 package db
 
 type Article struct {
-	Uuid      string `gorm:"type:varchar(32);index:'article_index';primary_key"` // 文章的唯一标识
-	Title     string `gorm:"type:varchar(255)"`                                  // 文章标题
-	Author    string `gorm:"type:varchar(32)"`                                   // 文章作者，用户的uuid
-	Content   string `gorm:"type:varchar(32)"`                                   // 文章的内容，内容的uuid
-	IsAllRead string `gorm:"type:varchar(2);default:'1'"`                        // 是否所有人可读,1-是,0-否,默认所有人可读
+	Uuid      string `gorm:"type:varchar(32);index:'article_index';primary_key" json:"id"` // 文章的唯一标识
+	Title     string `gorm:"type:varchar(255)" json:"title"`                               // 文章标题
+	Author    string `gorm:"type:varchar(32)" json:"author"`                               // 文章作者，用户的uuid
+	Content   string `gorm:"type:varchar(32)"`                                             // 文章的内容，内容的uuid
+	IsAllRead string `gorm:"type:varchar(2);default:'1'"`                                  // 是否所有人可读,1-是,0-否,默认所有人可读
 	// 是否所有人可编辑,1-是,0-否,默认所有人不可编辑
 	// 如果所有人可编辑,那么必须所有人可读也就是把is_all_read更新为1
 	IsAllWrite string `gorm:"type:varchar(2);default:'0'"`
@@ -68,9 +68,9 @@ func QueryArticleByUser(userID string) ([]Article, error) {
 	if err := DB.Table("article").Select("uuid,title").Where("is_all_read = '1'").Find(&artcileList).Error; err != nil {
 		return nil, err
 	}
-	if err := DB.Table("").Where().Find().Error; err != nil {
+	// if err := DB.Table("").Where().Find().Error; err != nil {
 
-	}
+	// }
 	// 合并列表并去重
 	return artcileList, nil
 }

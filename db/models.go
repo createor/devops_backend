@@ -30,4 +30,9 @@ func init() {
 	DB.Table("department_manage").CreateTable(&DepartmentManage{})
 	DB.Table("menu").CreateTable(&Menu{})
 	DB.Table("menu_with_role").CreateTable(&MenuWithRole{})
+	DB.Table("host").CreateTable(&Host{})
+	DB.Table("host_many_user").CreateTable(&HostManyUser{})
+	DB.Table("host_with_user").CreateTable(&HostWithUser{})
+	DB.Table("command_record").CreateTable(&CommandRecord{})
+	DB.Table("prohibit_command").CreateTable(&ProhibitCommand{})
 }

@@ -16,6 +16,7 @@ var jwtKey = []byte("123456")
 var ignorePath = []string{
 	"/api/user/login",
 	"/api/user/getkey",
+	"/api/captcha/code",
 }
 
 type Claims struct { // 需要加密的信息
@@ -46,6 +47,11 @@ func createToken(userID, userName string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(jwtKey)
 }
+
+// 删除token
+// func delToken() error {
+// 	return nil
+// }
 
 // jwt认证中间件
 func authMiddleware() gin.HandlerFunc {

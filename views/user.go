@@ -1,7 +1,6 @@
 package views
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,8 +14,8 @@ import (
 */
 
 type UserToken struct {
-	AccessToken string `json:"access_token"`
-	ExpireTime  int64  `json:"expire_time"`
+	AccessToken string `json:"access_token"` // 用户token
+	ExpireTime  int64  `json:"expire_time"`  // 过期时间
 }
 
 // 用户登陆视图
@@ -25,6 +24,7 @@ func Login(c *gin.Context) {
 	// 获取post请求的表单中的用户名和密码
 	username := c.PostForm("username")
 	passwaord := c.PostForm("password")
+	code := c.PostForm("code")
 	if username == "" || passwaord == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status": -1,
@@ -33,13 +33,39 @@ func Login(c *gin.Context) {
 		})
 		return
 	}
+	if code == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": -1,
+			"data":   "",
+			"msg":    "验证码不能为空",
+		})
+		return
+	}
+	// 先验证验证码
+	codeID, err := c.Cookie("CODEID")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": -1,
+			"data":   "",
+			"msg":    "错误的请求",
+		})
+		return
+	}
+	if !VerifyCaptchaHandler(codeID, code) {
+		c.JSON(http.StatusOK, gin.H{
+			"status": -1,
+			"data":   "",
+			"msg":    "验证码错误",
+		})
+		return
+	}
+	// 再校验用户
+	// 用户、密码解密
 	decode_name, _ := auth.DecryptData(username)
 	decode_passwd, _ := auth.DecryptData(passwaord)
+	// 校验用户
 	current_user, isExist, err := db.CheckUser(decode_name, decode_passwd)
-	if err != nil {
-		fmt.Println(err)
-	}
-	if !isExist {
+	if err != nil || !isExist {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"status": -1,
 			"data":   "",
@@ -65,7 +91,11 @@ type NewUser struct {
 }
 
 func AddUser(c *gin.Context) {
-
+	c.JSON(http.StatusOK, gin.H{
+		"status": 0,
+		"data":   "",
+		"msg":    "创建用户成功",
+	})
 }
 
 // 用户获取公钥视图

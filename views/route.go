@@ -14,12 +14,19 @@ func InitRouter() *gin.Engine {
 	r.Use(authMiddleware())
 	v1 := r.Group("/api")
 	{
+		// 验证码
+		r_code := v1.Group("captcha")
+		{
+			r_code.GET("/code", GenerateCaptchaHandler)
+		}
 		// 用户路由
 		r_user := v1.Group("/user")
 		{
 			r_user.GET("/getkey", ObtainKey)
 			r_user.POST("/login", Login)
 			r_user.POST("/changepasswd", ChangePassword)
+			r_user.GET("/logout", LogOut)
+			r_user.POST("/add", AddUser)
 		}
 		// 角色路由
 		r_role := v1.Group("/role")
@@ -28,9 +35,19 @@ func InitRouter() *gin.Engine {
 			r_role.POST("/add", AddRole)
 			r_role.POST("/bind", BindRole)
 		}
+		// 部门路由
 		r_department := v1.Group("/department")
 		{
 			r_department.GET("/user", GetAllUserFromDepartment)
+		}
+		r_host := v1.Group("/host")
+		{
+			r_host.GET("/all", GetAllHostBySelf)
+		}
+		// ws路由
+		r_ws := v1.Group("/ws")
+		{
+			r_ws.GET("/ssh", NewWebsocketHandler(PreloadConnect, ConnectSSH, true))
 		}
 	}
 

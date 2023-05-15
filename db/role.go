@@ -7,13 +7,13 @@ import (
 )
 
 type Role struct {
-	Uuid       string `gorm:"type:varchar(32);index:'role_index';primary_key"` // uuid,角色的唯一标识
-	RoleID     string `gorm:"type:varchar(20);column:role_id;unique"`          // 角色id
-	RoleName   string `gorm:"type:varchar(20)"`                                // 角色名称
-	Createor   string `gorm:"type:varchar(32)"`                                // 创建人,用户的uuid
-	CreateTime string `gorm:"type:varchar(20)"`                                // 创建时间
-	Updateor   string `gorm:"type:varchar(32)"`                                // 更新人,用户的Uuid
-	UpdateTime string `gorm:"type:varchar(20)"`                                // 更新时间
+	Uuid       string `gorm:"type:varchar(32);index:'role_index';primary_key" json:"id"` // uuid,角色的唯一标识
+	RoleID     string `gorm:"type:varchar(20);column:role_id;unique" json:"role_id"`     // 角色id
+	RoleName   string `gorm:"type:varchar(20)" json:"role_name"`                         // 角色名称
+	Createor   string `gorm:"type:varchar(32)" json:"-"`                                 // 创建人,用户的uuid
+	CreateTime string `gorm:"type:varchar(20)" json:"-"`                                 // 创建时间
+	Updateor   string `gorm:"type:varchar(32)" json:"-"`                                 // 更新人,用户的Uuid
+	UpdateTime string `gorm:"type:varchar(20)" json:"-"`                                 // 更新时间
 }
 
 type RoleWithUser struct {
