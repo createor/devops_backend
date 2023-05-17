@@ -74,7 +74,7 @@ func Login(c *gin.Context) {
 		return
 	}
 	var t UserToken
-	t.AccessToken, _ = createToken(current_user.Uuid, current_user.Name)
+	t.AccessToken, _ = createToken(current_user.Uuid, current_user.Name, "", "")
 	t.ExpireTime = 24 * 60 * 60
 	c.JSON(http.StatusOK, gin.H{
 		"status": 0,

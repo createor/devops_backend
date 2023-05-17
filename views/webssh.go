@@ -3,6 +3,7 @@ package views
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"server/db"
 	"server/utils"
@@ -65,6 +66,13 @@ func ConnectSSH(args ...string) string {
 	if wd.ID == "" {
 		wd.ID = utils.NewUuid()
 	}
+	wd.Command = strings.TrimSpace(wd.Command)
+	if wd.Command == "" {
+		return "{'status': -1, 'data':'', 'msg': '命令不能为空'}"
+	}
+	if ok, _ := db.IsProhibit(wd.Command); !ok {
+		return "{'status': -1, 'data':'', 'msg': '含有禁止的命令'}"
+	}
 	s, ok := utils.SSHSessionPool[wd.ID]
 	if !ok {
 		// 查找端口和密码
@@ -77,12 +85,12 @@ func ConnectSSH(args ...string) string {
 		}
 		s, e = rh.NewSSHSession(wd.ID)
 		if e != nil {
-			return fmt.Sprintf("{'status':-1,'data':'','msg':'错误:%v'}", e)
+			return fmt.Sprintf("{'status': -1, 'data': '', 'msg': '错误:%v'}", e)
 		}
 	}
 	out, err := utils.SessionDial(s, args[2])
 	if err != "" {
-		return fmt.Sprintf("{'status':-1,'data':'','msg':'错误:%v'}", err)
+		return fmt.Sprintf("{'status': -1, 'data': '', 'msg': '错误:%v'}", err)
 	}
-	return fmt.Sprintf("{'status':0,'data':'%v','msg':'成功'}", out)
+	return fmt.Sprintf("{'status': 0, 'data': '%v', 'msg': '成功'}", out)
 }

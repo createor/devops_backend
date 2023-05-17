@@ -1,5 +1,7 @@
 package db
 
+import "strings"
+
 /*
 远程主机后记录命令并过滤敏感命令，例如su等命令申请执行
 */
@@ -16,7 +18,7 @@ type CommandRecord struct {
 
 type ProhibitCommand struct {
 	ID         string `gorm:"pramry_key"`
-	Command    string `gorm:"type:varchar(255)"` // 禁止用户执行的命令，需要申请执行
+	Command    string `gorm:"type:varchar(255)"` // 禁止用户执行的命令,需要申请执行,单个单词不能有空格
 	Createor   string `gorm:"type:varchar(32)"`
 	CreateTime string `gorm:"type:varchar(20)"`
 }
@@ -39,4 +41,17 @@ func CreateProhibitCommand(p *ProhibitCommand) error {
 	}
 	tx.Commit()
 	return nil
+}
+
+// 使用正则匹配关键字
+func IsProhibit(c string) (bool, error) {
+	c_l := strings.Split(c, " ") // 按空格分割
+	var n int
+	if err := DB.Table("prohibit_command").Where("command in ?", c_l).Count(&n).Error; err != nil {
+		return false, err
+	}
+	if n > 0 {
+		return false, nil
+	}
+	return true, nil
 }

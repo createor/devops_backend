@@ -14,7 +14,8 @@ type NewArticle struct {
 	Content string `json:"content" bind:"required"` // 文章内容
 }
 
-func CreateArticle(c *gin.Context) {
+// 添加文章接口
+func AddArticle(c *gin.Context) {
 	userID, ok := c.Get("user_id") // 获取用户id
 	if !ok {
 		c.JSON(http.StatusUnauthorized, gin.H{
@@ -36,12 +37,15 @@ func CreateArticle(c *gin.Context) {
 	}
 	author := userID.(string)
 	articleID := utils.NewUuid()
+	contentID := utils.GetFileNameByRandom()
+	isCreate, _ := utils.SaveArticle(utils.FilterArticle(a.Content), contentID)
 	err = db.CreateArticle(db.Article{
-		Uuid:   articleID,
-		Title:  a.Title,
-		Author: author,
+		Uuid:    articleID,
+		Title:   a.Title,
+		Author:  author,
+		Content: contentID,
 	})
-	if err != nil {
+	if err != nil || !isCreate {
 		c.JSON(http.StatusOK, gin.H{
 			"status": -1,
 			"data":   "",
@@ -62,6 +66,7 @@ func CreateArticle(c *gin.Context) {
 	})
 }
 
+// 获取用户能阅读的所有文章
 func GetAllArticleByUser(c *gin.Context) {
 	userID, ok := c.Get("user_id") // 获取用户id
 	if !ok {
@@ -84,6 +89,37 @@ func GetAllArticleByUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status": 0,
 		"data":   articleList,
+		"msg":    "查询成功",
+	})
+}
+
+// 用户浏览文章
+func BrowseArticle(c *gin.Context) {
+	// 获取用户id
+	userID, ok := c.Get("user_id")
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"status": -1,
+			"data":   "",
+			"msg":    "认证失败",
+		})
+		return
+	}
+	// 获取文章id
+	articleID := c.Param("articleID")
+	// 查询权限
+	isAllow := db.QueryArticleByContent(userID.(string), articleID)
+	if !isAllow {
+		c.JSON(http.StatusForbidden, gin.H{
+			"status": -1,
+			"data":   "",
+			"msg":    "无权限阅读",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"status": 0,
+		"data":   utils.ShowArtcle(articleID),
 		"msg":    "查询成功",
 	})
 }

@@ -10,7 +10,7 @@ import (
 )
 
 // 图片保存目录
-var ImgDirectory = "F:/代码/devops_backend/server"
+var ImgDirectory = filepath.Join(Settings.FilePath, "images")
 
 // ImgName 获取图片名称，名称使用随机码
 //

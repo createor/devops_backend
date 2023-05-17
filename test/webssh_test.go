@@ -1,9 +1,12 @@
-package utils
+package test
 
-import "testing"
+import (
+	"server/utils"
+	"testing"
+)
 
 func TestSessionDial(t *testing.T) {
-	test := RemoteHost{
+	test := utils.RemoteHost{
 		Host:     "127.0.0.1",
 		Port:     "22",
 		UserName: "root",
@@ -13,7 +16,7 @@ func TestSessionDial(t *testing.T) {
 	if e != nil {
 		t.Errorf("创建会话失败:%v", e)
 	}
-	out, err := SessionDial(s, "whoami")
+	out, err := utils.SessionDial(s, "whoami")
 	if err != "" {
 		t.Errorf("执行命令错误:%v", err)
 	}

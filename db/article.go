@@ -105,3 +105,8 @@ func QueryArticle(userID, articleID, departmentID string) (bool, error) {
 	}
 	return false, nil
 }
+
+
+func QueryArticleByContent(userID,contentID string) bool {
+	return true
+}
